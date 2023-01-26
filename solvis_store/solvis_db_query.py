@@ -102,6 +102,22 @@ def get_ruptures_in(solution_id: str, rupture_ids: tuple) -> gpd.GeoDataFrame:
     return pd.DataFrame(values, index=index)
 
 
+def get_all_solution_ruptures(solution_id: str) -> gpd.GeoDataFrame:
+
+    log.debug(f">>> get_all_solution_ruptures({solution_id})")
+    t0 = dt.utcnow()
+    index = []
+    values = []
+
+    for item in mSR.query(solution_id):
+        values.append(item.attribute_values)
+        index.append(item.rupture_index)
+
+    db_metrics.put_duration(__name__, 'get_all_solution_ruptures', dt.utcnow() - t0)
+    log.debug(f">>> get_all_solution_ruptures: index has {len(index)}; values has {len(values)}")
+    return pd.DataFrame(values, index=index)
+
+
 @lru_cache(maxsize=32)
 def get_ruptures(solution_id: str) -> gpd.GeoDataFrame:
     log.debug(f">>> get_ruptures({solution_id})")
@@ -147,28 +163,25 @@ def matched_rupture_sections_gdf(
 
     t0 = dt.utcnow()
     locs: List[str] = locations.split(',')
+
     log.debug(locations)
 
-    log.debug('Intersection/Union')
-    ids = get_rupture_ids(solution_id, locs, int(radius), union)
-    if not ids:
-        log.info(f"No rupture ids were returned for {solution_id}, {locs}, {int(radius)}, {union}")
-        return
-
-    t1 = dt.utcnow()
-    log.info(f'get_rupture_ids() (not cached), took {t1-t0}')
-
-    ruptures_df = get_ruptures_in(solution_id, tuple(ids))
+    if locations:
+        log.debug('Intersection/Union')
+        ids = get_rupture_ids(solution_id, locs, int(radius), union)
+        if not ids:
+            log.info(f"No rupture ids were returned for {solution_id}, {locs}, {int(radius)}, {union}")
+            return
+        t1 = dt.utcnow()
+        log.info(f'get_rupture_ids() (not cached), took {t1-t0}')
+        ruptures_df = get_ruptures_in(solution_id, tuple(ids))
+    else:  # no filter by location/radis
+        log.debug('All ruptures')
+        t1 = dt.utcnow()
+        ruptures_df = get_all_solution_ruptures(solution_id)
 
     t2 = dt.utcnow()
     log.info(f'get_ruptures_in() (maybe cached), took {t2-t1}')
-
-    # # THE OLD way,
-    # old_ruptures_df = get_ruptures(solution_id)
-    # old_ruptures_df = ruptures_df[old_ruptures_df.rupture_index.isin(list(ids))]
-    # assert old_ruptures_df.shape == ruptures_df.shape
-    # t2a = dt.utcnow()
-    # log.info(f'get_ruptures() (maybe cached), took {t2a-t2}')
 
     if min_rate:
         log.debug(f"apply min rate filter: min={min_rate}")
@@ -190,7 +203,7 @@ def matched_rupture_sections_gdf(
     log.info(f'apply filters  took {t3-t2}')
 
     if ruptures_df.empty:
-        return None
+        return ruptures_df
 
     log.debug("Build RuptureSections df")
 
