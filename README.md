@@ -7,15 +7,10 @@
 [![codecov](https://codecov.io/gh/GNS-Science/solvis-store/branch/main/graphs/badge.svg)](https://codecov.io/github/GNS-Science/solvis-store)
 
 
-
-Solvis Store
-
-
 * Documentation: <https://GNS-Science.github.io/solvis-store>
 * GitHub: <https://github.com/GNS-Science/solvis-store>
 * PyPI: <https://pypi.org/project/solvis-store/>
 * Free software: GPL-3.0-only
-
 
 ## Features
 
@@ -23,7 +18,12 @@ Solvis Store
 
 ## TESTING
 
-```TESTING=1 poetry run pytest -x -v```
+Prereq: make sure poetry can use the `.env` file
+```
+poetry self add poetry-dotenv-plugin
+```
+
+`poetry run pytest`
 
 ## Credits
 
