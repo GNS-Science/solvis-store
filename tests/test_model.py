@@ -11,16 +11,16 @@ from solvis_store import model
 class PynamoTest(unittest.TestCase):
     def setUp(self):
         model.set_local_mode()
-        model.SolutionLocationRadiusRuptureSet.create_table(wait=True)
-        print("Migrate created table: SolutionLocationRadiusRuptureSet")
+        model.RuptureSetLocationRadiusRuptures.create_table(wait=True)
+        print("Migrate created table: RuptureSetLocationRadiusRuptures")
 
     def test_table_exists(self):
         # with app.app_context():
-        self.assertEqual(model.SolutionLocationRadiusRuptureSet.exists(), True)
+        self.assertEqual(model.RuptureSetLocationRadiusRuptures.exists(), True)
 
     def tearDown(self):
         # with app.app_context():
-        model.SolutionLocationRadiusRuptureSet.delete_table()
+        model.RuptureSetLocationRadiusRuptures.delete_table()
         return super(PynamoTest, self).tearDown()
 
 

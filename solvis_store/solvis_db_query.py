@@ -13,30 +13,30 @@ from .config import CLOUDWATCH_APP_NAME
 
 log = logging.getLogger(__name__)
 
-mSLR = model.SolutionLocationRadiusRuptureSet
+mRLR = model.RuptureSetLocationRadiusRuptures
+mRFS = model.RuptureSetFaultSection
 mSR = model.SolutionRupture
-mSFS = model.SolutionFaultSection
 
 db_metrics = ServerlessMetricWriter(lambda_name=CLOUDWATCH_APP_NAME, metric_name="MethodDuration")
 db_metrics_hr = ServerlessMetricWriter(lambda_name=CLOUDWATCH_APP_NAME, metric_name="MethodDuration", resolution=1)
 
 
 # QUERY operations for the API get endpoint(s)
-def get_rupture_ids(solution_id: str, locations: List[str], radius: int, union: bool = False) -> Set[int]:
+def get_rupture_ids(rupture_set_id: str, locations: List[str], radius: int, union: bool = False) -> Set[int]:
 
     t0 = dt.utcnow()
 
     log.debug(f'get_rupture_ids({locations}, {radius}, union: {union})')
 
     @lru_cache(maxsize=256)
-    def query_fn(solution_id, loc, radius):
-        return [i for i in mSLR.query(f'{solution_id}', mSLR.location_radius == (f"{loc}:{radius}"))]
+    def query_fn(rupture_set_id, loc, radius):
+        return [i for i in mRLR.query(f'{rupture_set_id}', mRLR.location_radius == (f"{loc}:{radius}"))]
 
     def get_the_ids(locations):
         first_set = True
         ids = set()
         for loc in locations:
-            items = query_fn(solution_id, loc, radius)
+            items = query_fn(rupture_set_id, loc, radius)
 
             assert len(items) in [0, 1]
 
@@ -135,12 +135,12 @@ def get_ruptures(solution_id: str) -> gpd.GeoDataFrame:
 
 
 @lru_cache(maxsize=32)
-def get_fault_sections(solution_id: str) -> gpd.GeoDataFrame:
-    log.debug(f">>> get_fault_sections({solution_id})")
+def get_fault_sections(rupture_set_id: str) -> gpd.GeoDataFrame:
+    log.debug(f">>> get_fault_sections({rupture_set_id})")
     t0 = dt.utcnow()
     index = []
     values = []
-    for item in mSFS.query(f'{solution_id}'):
+    for item in mRFS.query(f'{rupture_set_id}'):
         values.append(item.attribute_values)
         index.append(item.section_index)
     db_metrics_hr.put_duration(__name__, 'get_fault_sections[query]', dt.utcnow() - t0)
@@ -152,6 +152,7 @@ def get_fault_sections(solution_id: str) -> gpd.GeoDataFrame:
 @lru_cache(maxsize=32)
 def matched_rupture_sections_gdf(
     solution_id: str,
+    rupture_set_id: str,
     locations: str,
     radius: int,
     min_rate: float,
@@ -179,6 +180,7 @@ def matched_rupture_sections_gdf(
         log.debug('All ruptures')
         t1 = dt.utcnow()
         ruptures_df = get_all_solution_ruptures(solution_id)
+
 
     t2 = dt.utcnow()
     log.info(f'get_ruptures_in() (maybe cached), took {t2-t1}')
@@ -222,7 +224,7 @@ def matched_rupture_sections_gdf(
     t4 = dt.utcnow()
     log.info(f'apply build_rupture_sections_df (not cached), took {t4-t3}')
 
-    sections_gdf = get_fault_sections(solution_id)
+    sections_gdf = get_fault_sections(rupture_set_id)
 
     t5 = dt.utcnow()
     log.info(f'apply get_fault_sections (maybe cached), took {t5-t4}')
@@ -239,19 +241,18 @@ def matched_rupture_sections_gdf(
     rupture_sections_gdf = (
         gpd.GeoDataFrame(rupture_sections_df)
         .join(sections_gdf, 'section_index', how='inner', rsuffix='_R')
-        .drop(columns=['section_index_R'])
+        .drop(columns=['rupture_set_id', 'rupture_set_id_R'])
     )
 
     t6 = dt.utcnow()
     log.info(f'Assemble geojson (not cached), took {t6-t5}')
 
     rupture_sections_gdf = rupture_sections_gdf.drop(
-        columns=['area_m2', 'length_m', 'parent_id', 'parent_name', 'section_index_rk', 'solution_id', 'solution_id_R']
+        columns=['area_m2', 'length_m', 'parent_id', 'parent_name', 'section_index_rk']#, 'solution_id_R']
     )
 
     # # Here we want to collapse all ruptures so we have just one feature for section. Each section can have the
     # count of ruptures, min, mean, max magnitudes & annual rates
-
     section_aggregates_gdf = rupture_sections_gdf.pivot_table(
         index=['section_index'], aggfunc=dict(annual_rate=['sum', 'min', 'max'], magnitude=['count', 'min', 'max'])
     )
@@ -260,5 +261,6 @@ def matched_rupture_sections_gdf(
     section_aggregates_gdf.columns = [".".join(a) for a in section_aggregates_gdf.columns.to_flat_index()]
     section_aggregates_gdf = section_aggregates_gdf.join(sections_gdf, 'section_index', how='inner', rsuffix='_R')
 
+    print(section_aggregates_gdf.info())
     db_metrics.put_duration(__name__, 'matched_rupture_sections_gdf', dt.utcnow() - t0)
     return section_aggregates_gdf

@@ -23,13 +23,13 @@ class MetricatedModel(Model):
         return res
 
 
-class SolutionLocationRadiusRuptureSet(MetricatedModel):
+class RuptureSetLocationRadiusRuptures(MetricatedModel):
     class Meta:
         billing_mode = 'PAY_PER_REQUEST'
-        table_name = f"SolutionLocationRadiusRuptureSet-{DEPLOYMENT_STAGE}"
+        table_name = f"SOLVIS_RuptureSetLocationRadiusRuptures-{DEPLOYMENT_STAGE}"
         region = REGION
 
-    solution_id = UnicodeAttribute(hash_key=True)
+    rupture_set_id = UnicodeAttribute(hash_key=True)
     location_radius = UnicodeAttribute(range_key=True)  # eg WLG:10000
 
     radius = NumberAttribute()
@@ -38,31 +38,13 @@ class SolutionLocationRadiusRuptureSet(MetricatedModel):
     rupture_count = NumberAttribute()
 
 
-class SolutionRupture(MetricatedModel):
+class RuptureSetFaultSection(MetricatedModel):
     class Meta:
         billing_mode = 'PAY_PER_REQUEST'
-        table_name = f"SolutionRupture-{DEPLOYMENT_STAGE}"
+        table_name = f"SOLVIS_RuptureSetFaultSection-{DEPLOYMENT_STAGE}"
         region = REGION
 
-    solution_id = UnicodeAttribute(hash_key=True)
-    rupture_index_rk = UnicodeAttribute(range_key=True)
-
-    rupture_index = NumberAttribute()
-    magnitude = NumberAttribute()  # Magnitude,
-    avg_rake = NumberAttribute()  # Average Rake (degrees),
-    area_m2 = NumberAttribute()  # Area (m^2),
-    length_m = NumberAttribute()  # Length (m),
-    annual_rate = NumberAttribute()  # Annual Rate
-    fault_sections = NumberSetAttribute()
-
-
-class SolutionFaultSection(MetricatedModel):
-    class Meta:
-        billing_mode = 'PAY_PER_REQUEST'
-        table_name = f"SolutionFaultSection-{DEPLOYMENT_STAGE}"
-        region = REGION
-
-    solution_id = UnicodeAttribute(hash_key=True)
+    rupture_set_id = UnicodeAttribute(hash_key=True)
     section_index_rk = UnicodeAttribute(range_key=True)
 
     section_index = NumberAttribute()
@@ -81,7 +63,27 @@ class SolutionFaultSection(MetricatedModel):
     geometry = UnicodeAttribute()
 
 
-table_classes = (SolutionLocationRadiusRuptureSet, SolutionRupture, SolutionFaultSection)
+class SolutionRupture(MetricatedModel):
+    class Meta:
+        billing_mode = 'PAY_PER_REQUEST'
+        table_name = f"SOLVIS_SolutionRupture-{DEPLOYMENT_STAGE}"
+        region = REGION
+
+    solution_id = UnicodeAttribute(hash_key=True)
+    rupture_index_rk = UnicodeAttribute(range_key=True)
+
+    rupture_set_id = UnicodeAttribute()
+    rupture_index = NumberAttribute()
+    magnitude = NumberAttribute()  # Magnitude,
+    avg_rake = NumberAttribute()  # Average Rake (degrees),
+    area_m2 = NumberAttribute()  # Area (m^2),
+    length_m = NumberAttribute()  # Length (m),
+    annual_rate = NumberAttribute()  # Annual Rate
+    fault_sections = NumberSetAttribute()
+
+
+
+table_classes = (RuptureSetLocationRadiusRuptures, RuptureSetFaultSection, SolutionRupture)
 
 
 def set_local_mode(host="http://localhost:8000"):

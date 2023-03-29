@@ -15,7 +15,7 @@ def clean_slate():
 
 def get_location_radius_rupture_models(
     solution_id: str, sol: solvis.InversionSolution, locations: List[Dict], radii: List[int]
-) -> Iterator[model.SolutionLocationRadiusRuptureSet]:
+) -> Iterator[model.RuptureSetLocationRadiusRuptures]:
     log.debug('get_location_radius_rupture_models')
     for item in locations:
 
@@ -28,7 +28,7 @@ def get_location_radius_rupture_models(
             if len(rupts) > 1e5:
                 raise Exception(f"Too many ruptures in {loc} with radius {radius}: {len(rupts)}")
 
-            yield model.SolutionLocationRadiusRuptureSet(
+            yield model.RuptureSetLocationRadiusRuptures(
                 location_radius=f"{loc}:{int(radius)}",
                 solution_id=solution_id,
                 radius=int(radius),
@@ -39,9 +39,9 @@ def get_location_radius_rupture_models(
 
 
 # sol, locations, radii
-def save_solution_location_radii(solution_id: str, models: List[model.SolutionLocationRadiusRuptureSet]):
+def save_solution_location_radii(solution_id: str, models: List[model.RuptureSetLocationRadiusRuptures]):
     log.debug('save_solution_location_radii')
-    with model.SolutionLocationRadiusRuptureSet.batch_write() as batch:
+    with model.RuptureSetLocationRadiusRuptures.batch_write() as batch:
         for item in models:
             # print(item)
             # item.save()
@@ -73,10 +73,10 @@ def save_solution_ruptures(solution_id, models: List[model.SolutionRupture]):
             batch.save(item)
 
 
-def get_fault_section_models(solution_id, sol) -> Iterator[model.SolutionFaultSection]:
+def get_fault_section_models(solution_id, sol) -> Iterator[model.RuptureSetFaultSection]:
     log.debug('get_fault_section_models')
     for row in sol.fault_sections.itertuples():
-        yield model.SolutionFaultSection(
+        yield model.RuptureSetFaultSection(
             solution_id=solution_id,
             section_index_rk=str(row[1]),
             section_index=row[1],
@@ -96,8 +96,8 @@ def get_fault_section_models(solution_id, sol) -> Iterator[model.SolutionFaultSe
         )
 
 
-def save_solution_fault_sections(solution_id, models: List[model.SolutionFaultSection]):
+def save_solution_fault_sections(solution_id, models: List[model.RuptureSetFaultSection]):
     log.debug('save_solution_fault_sections')
-    with model.SolutionFaultSection.batch_write() as batch:
+    with model.RuptureSetFaultSection.batch_write() as batch:
         for item in models:
             batch.save(item)
