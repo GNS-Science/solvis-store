@@ -1,7 +1,7 @@
 import logging
 from datetime import datetime as dt
 from functools import lru_cache
-from typing import List, Set
+from typing import List, Set, NamedTuple, Iterator
 
 import geopandas as gpd
 import pandas as pd
@@ -21,8 +21,21 @@ db_metrics = ServerlessMetricWriter(lambda_name=CLOUDWATCH_APP_NAME, metric_name
 db_metrics_hr = ServerlessMetricWriter(lambda_name=CLOUDWATCH_APP_NAME, metric_name="MethodDuration", resolution=1)
 
 
+class RuptureIndexDistance(NamedTuple):
+    rupt_id: int
+    distance: float = float('nan')
+
+
+def tuple_id_dist(item: model.RuptureSetLocationRadiusRuptures) -> Iterator[RuptureIndexDistance]:
+    if item.distances is None:
+        for rupt_id in item.ruptures:
+            yield RuptureIndexDistance(rupt_id=rupt_id)
+    else:
+        for idx, rupt_id in enumerate(item.ruptures):
+            yield RuptureIndexDistance(rupt_id=rupt_id, distance=item.distances[idx])
+
 # QUERY operations for the API get endpoint(s)
-def get_rupture_ids(rupture_set_id: str, locations: List[str], radius: int, union: bool = False) -> Set[int]:
+def get_rupture_ids(rupture_set_id: str, locations: List[str], radius: int, union: bool = False) -> Set[RuptureIndexDistance]:
 
     t0 = dt.utcnow()
 
@@ -34,7 +47,7 @@ def get_rupture_ids(rupture_set_id: str, locations: List[str], radius: int, unio
 
     def get_the_ids(locations):
         first_set = True
-        ids = set()
+        tuples = set()
         for loc in locations:
             items = query_fn(rupture_set_id, loc, radius)
 
@@ -57,16 +70,16 @@ def get_rupture_ids(rupture_set_id: str, locations: List[str], radius: int, unio
                 )
 
                 if first_set:
-                    ids = ids.union(item.ruptures)
+                    tuples = tuples.union(tuple_id_dist(item.ruptures))
                     first_set = False
                 else:
                     if union:
-                        ids = ids.union(item.ruptures)
+                        tuples = tuples.union(tuple_id_dist(item.ruptures))
                     else:
-                        ids = ids.intersection(item.ruptures)
+                        tuples = tuples.intersection(tuple_id_dist(item.ruptures))
 
-        log.debug(f'get_the_ids({locations}) returns {len(list(ids))} rupture ids')
-        return ids
+        log.debug(f'get_the_tuples({locations}) returns {len(list(tuples))} rupture tuples')
+        return tuples
 
     ids = get_the_ids(locations)
 
@@ -169,9 +182,9 @@ def matched_rupture_sections_gdf(
 
     if locations:
         log.debug('Intersection/Union')
-        ids = get_rupture_ids(solution_id, locs, int(radius), union)
+        ids = get_rupture_ids(rupture_set_id, locs, int(radius), union)
         if not ids:
-            log.info(f"No rupture ids were returned for {solution_id}, {locs}, {int(radius)}, {union}")
+            log.info(f"No rupture ids were returned for {rupture_set_id}, {locs}, {int(radius)}, {union}")
             return
         t1 = dt.utcnow()
         log.info(f'get_rupture_ids() (not cached), took {t1-t0}')

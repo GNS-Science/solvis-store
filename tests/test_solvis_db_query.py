@@ -2,7 +2,7 @@
 """Tests for `solvis_store.model` package."""
 
 import unittest
-
+import random
 from moto import mock_dynamodb
 from solvis_store import model
 from solvis_store.solvis_db_query import get_rupture_ids, matched_rupture_sections_gdf, get_all_solution_ruptures
@@ -27,6 +27,24 @@ class PynamoTest(unittest.TestCase):
         ids = get_rupture_ids(rupture_set_id='test_ruptset_id', locations=['WLG'], radius=10000)
         self.assertEqual(len(ids), 3)
         self.assertEqual(ids, set([1, 2, 3]))
+
+
+    def test_save_with_distances(self):
+        dataframe = model.RuptureSetLocationRadiusRuptures(
+            rupture_set_id='test_ruptset_id',
+            location_radius='WLG:10000',
+            radius=10000,
+            location='WLG',
+            ruptures=[1, 2, 3],
+            distances=[random.randint(1000, 10000) for n in range(3) ],
+            rupture_count=3,
+        )
+        dataframe.save()
+
+        # sr = get_all_solution_ruptures('test_solution_id')
+        # print(sr)
+        # self.assertEqual(sr.shape, (1, 10))
+
 
     def tearDown(self):
         # with app.app_context():
@@ -95,6 +113,40 @@ class PynamoTestMatchedSections(unittest.TestCase):
         print(gdf)
         assert not gdf.empty
         self.assertEqual(gdf.shape, (5, 22))
+
+
+
+    def test_location_matched_query(self):
+        model.RuptureSetLocationRadiusRuptures.create_table(wait=True)
+        dataframe = model.RuptureSetLocationRadiusRuptures(
+            rupture_set_id='test_ruptset_id',
+            location_radius='WLG:10000',
+            radius=10000,
+            location='WLG',
+            ruptures=[1, 2, 3],
+            distances=[random.randint(1000, 10000) for n in range(3) ],
+            rupture_count=3,
+        )
+        dataframe.save()
+
+        gdf = matched_rupture_sections_gdf(
+            solution_id="test_solution_id",
+            rupture_set_id='test_ruptset_id',
+            locations="WLG",
+            radius=10000,
+            min_rate=0,
+            max_rate=1e-1,
+            min_mag=1,
+            max_mag=8,
+            union=False,
+        )
+        print(gdf)
+        assert not gdf.empty
+        self.assertEqual(gdf.shape, (5, 22))
+
+        print(gdf)
+        assert 0
+
 
 
     def tearDown(self):

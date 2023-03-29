@@ -12,7 +12,6 @@ log = logging.getLogger("pynamodb")
 
 db_metrics = ServerlessMetricWriter(lambda_name=CLOUDWATCH_APP_NAME, metric_name="MethodDuration", resolution=1)
 
-
 class MetricatedModel(Model):
     @classmethod
     def query(cls, *args, **kwargs):
@@ -35,6 +34,7 @@ class RuptureSetLocationRadiusRuptures(MetricatedModel):
     radius = NumberAttribute()
     location = UnicodeAttribute()
     ruptures = NumberSetAttribute()  # Rupture Index,
+    distances = NumberSetAttribute(null=True) # optional list of distances, one for each rupture_index
     rupture_count = NumberAttribute()
 
 
