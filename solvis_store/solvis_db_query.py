@@ -26,7 +26,7 @@ class RuptureIndexDistance(NamedTuple):
     distance: float = float('nan')
 
 
-def tuple_id_dist(item: model.RuptureSetLocationRadiusRuptures) -> Iterator[RuptureIndexDistance]:
+def id_distance_tuples(item: model.RuptureSetLocationRadiusRuptures) -> Iterator[RuptureIndexDistance]:
     if item.distances is None:
         for rupt_id in item.ruptures:
             yield RuptureIndexDistance(rupt_id=rupt_id)
@@ -47,7 +47,8 @@ def get_rupture_ids(rupture_set_id: str, locations: List[str], radius: int, unio
 
     def get_the_ids(locations):
         first_set = True
-        tuples = set()
+        tuples = list()
+        ids = set()
         for loc in locations:
             items = query_fn(rupture_set_id, loc, radius)
 
@@ -69,14 +70,16 @@ def get_rupture_ids(rupture_set_id: str, locations: List[str], radius: int, unio
                     'ruptures: {len(item.ruptures)}  examples: {list(item.ruptures)[:10]}'
                 )
 
+                tuples = id_distance_tuples(item.ruptures)
+                tuple_ids = set([t.rupt_id for t in tuples])
                 if first_set:
-                    tuples = tuples.union(tuple_id_dist(item.ruptures))
+                    ids = set(tuple_ids)
                     first_set = False
                 else:
                     if union:
-                        tuples = tuples.union(tuple_id_dist(item.ruptures))
+                        ids = tuples.union(id_distance_tuples(item.ruptures))
                     else:
-                        tuples = tuples.intersection(tuple_id_dist(item.ruptures))
+                        tuples = tuples.intersection(id_distance_tuples(item.ruptures))
 
         log.debug(f'get_the_tuples({locations}) returns {len(list(tuples))} rupture tuples')
         return tuples
