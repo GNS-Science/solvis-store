@@ -7,10 +7,10 @@ from pynamodb.models import Model
 from .cloudwatch import ServerlessMetricWriter
 from .config import CLOUDWATCH_APP_NAME, DEPLOYMENT_STAGE, IS_OFFLINE, IS_TESTING, REGION
 
-log = logging.getLogger("pynamodb")
-# log.setLevel(logging.DEBUG)
+log = logging.getLogger(__name__)
 
 db_metrics = ServerlessMetricWriter(lambda_name=CLOUDWATCH_APP_NAME, metric_name="MethodDuration", resolution=1)
+
 
 class MetricatedModel(Model):
     @classmethod
@@ -22,10 +22,10 @@ class MetricatedModel(Model):
         return res
 
 
-class RuptureSetLocationRadiusRuptures(MetricatedModel):
+class RuptureSetLocationDistances(MetricatedModel):
     class Meta:
         billing_mode = 'PAY_PER_REQUEST'
-        table_name = f"SOLVIS_RuptureSetLocationRadiusRuptures-{DEPLOYMENT_STAGE}"
+        table_name = f"SOLVIS_RuptureSetLocationDistances-{DEPLOYMENT_STAGE}"
         region = REGION
 
     rupture_set_id = UnicodeAttribute(hash_key=True)
@@ -34,56 +34,11 @@ class RuptureSetLocationRadiusRuptures(MetricatedModel):
     radius = NumberAttribute()
     location = UnicodeAttribute()
     ruptures = NumberSetAttribute()  # Rupture Index,
-    distances = NumberSetAttribute(null=True) # optional list of distances, one for each rupture_index
+    distances = NumberSetAttribute(null=True)  # optional list of distances, one for each rupture_index
     rupture_count = NumberAttribute()
 
 
-class RuptureSetFaultSection(MetricatedModel):
-    class Meta:
-        billing_mode = 'PAY_PER_REQUEST'
-        table_name = f"SOLVIS_RuptureSetFaultSection-{DEPLOYMENT_STAGE}"
-        region = REGION
-
-    rupture_set_id = UnicodeAttribute(hash_key=True)
-    section_index_rk = UnicodeAttribute(range_key=True)
-
-    section_index = NumberAttribute()
-    fault_name = UnicodeAttribute()
-    dip_degree = NumberAttribute()
-    rake = NumberAttribute()
-    low_depth = NumberAttribute()
-    up_depth = NumberAttribute()
-    dip_dir = NumberAttribute()
-    aseismic_slip_factor = NumberAttribute()
-    coupling_coeff = NumberAttribute()
-    slip_rate = NumberAttribute()
-    parent_id = NumberAttribute()
-    parent_name = UnicodeAttribute()
-    slip_rate_std_dev = NumberAttribute()
-    geometry = UnicodeAttribute()
-
-
-class SolutionRupture(MetricatedModel):
-    class Meta:
-        billing_mode = 'PAY_PER_REQUEST'
-        table_name = f"SOLVIS_SolutionRupture-{DEPLOYMENT_STAGE}"
-        region = REGION
-
-    solution_id = UnicodeAttribute(hash_key=True)
-    rupture_index_rk = UnicodeAttribute(range_key=True)
-
-    rupture_set_id = UnicodeAttribute()
-    rupture_index = NumberAttribute()
-    magnitude = NumberAttribute()  # Magnitude,
-    avg_rake = NumberAttribute()  # Average Rake (degrees),
-    area_m2 = NumberAttribute()  # Area (m^2),
-    length_m = NumberAttribute()  # Length (m),
-    annual_rate = NumberAttribute()  # Annual Rate
-    fault_sections = NumberSetAttribute()
-
-
-
-table_classes = (RuptureSetLocationRadiusRuptures, RuptureSetFaultSection, SolutionRupture)
+table_classes = (RuptureSetLocationDistances,)
 
 
 def set_local_mode(host="http://localhost:8000"):

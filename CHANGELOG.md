@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.2.0] - 2023-04-19
+### Changed
+ - major breaking change, basically it's a new API, focussing solely on Distances for RuptureSets with Locations
+ - class RuptureSetLocationRadiusRuptures is superceded by RuptureSetLocationDistances
+ - other models and supporting code are gone
+
+### Added
+ - more testing for set operation union vs intersection
+
+## Removed
+ - old models etc
+
 ## [0.1.1] - 2023-02-21
 ### Changed
  - update github actions helper
