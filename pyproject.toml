@@ -4,7 +4,7 @@ name = "solvis-store"
 version = "1.0.0"
 homepage = "https://github.com/GNS-Science/solvis-store"
 description = "Solvis Store."
-authors = ["Oakley <o.jurgens@gns.cri.nz>", "Chris Chamberlain <chrisbc@artisan.co.nz>"]
+authors = ["Oakley Jurgens <nshm@gns.cri.nz>", "Chris Chamberlain <chrisbc@artisan.co.nz>"]
 readme = "README.md"
 license =  "GPL-3.0-only"
 classifiers=[
@@ -67,7 +67,6 @@ moto = "^3.1.10"
 [tool.poetry.dependencies]
 python = ">=3.8,<4.0"
 pynamodb = "^5.2.1"
-geopandas = "^0.12.2"
 
 [tool.poetry.extras]
 test = [
