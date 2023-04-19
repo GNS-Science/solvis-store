@@ -1,7 +1,7 @@
 [tool]
 [tool.poetry]
 name = "solvis-store"
-version = "0.1.0"
+version = "1.0.0"
 homepage = "https://github.com/GNS-Science/solvis-store"
 description = "Solvis Store."
 authors = ["Oakley <o.jurgens@gns.cri.nz>", "Chris Chamberlain <chrisbc@artisan.co.nz>"]
