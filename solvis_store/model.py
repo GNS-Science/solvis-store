@@ -1,7 +1,7 @@
 import logging
 from datetime import datetime as dt
 
-from pynamodb.attributes import NumberAttribute, NumberSetAttribute, UnicodeAttribute
+from pynamodb.attributes import NumberAttribute, ListAttribute, NumberSetAttribute, UnicodeAttribute
 from pynamodb.models import Model
 
 from .cloudwatch import ServerlessMetricWriter
@@ -29,12 +29,12 @@ class RuptureSetLocationDistances(MetricatedModel):
         region = REGION
 
     rupture_set_id = UnicodeAttribute(hash_key=True)
-    location_radius = UnicodeAttribute(range_key=True)  # eg WLG:10000
+    location_radius = UnicodeAttribute(range_key=True)  # eg WLG:100
 
     radius = NumberAttribute()
     location = UnicodeAttribute()
     ruptures = NumberSetAttribute()  # Rupture Index,
-    distances = NumberSetAttribute(null=True)  # optional list of distances, one for each rupture_index
+    distances = ListAttribute(of = NumberAttribute)  # optional list of distances, one for each rupture_index
     rupture_count = NumberAttribute()
 
 

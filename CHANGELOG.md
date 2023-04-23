@@ -1,7 +1,12 @@
 # Changelog
 
+## [1.1.x] - 2023-04-
+### Added
+ - poetry run cli -> scripts/cli.py
+ - for extra dependencies install with `poetry install --with scripts`
+
 ## [1.0.1] - 2023-04-19
-## Removed
+### Removed
  - geopandas dependency
 
 ## [1.0.0] - 2023-04-19
