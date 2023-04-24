@@ -1,9 +1,11 @@
 # Changelog
 
-## [1.1.x] - 2023-04-
+## [1.1.0] - 2023-04-24
 ### Added
  - poetry run cli -> scripts/cli.py
  - for extra dependencies install with `poetry install --with scripts`
+### Changed
+ - requires nzshm-model >=0.3.0
 
 ## [1.0.1] - 2023-04-19
 ### Removed

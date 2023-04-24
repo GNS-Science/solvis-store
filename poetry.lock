@@ -347,7 +347,7 @@ python-versions = ">=3.6"
 name = "dacite"
 version = "1.8.0"
 description = "Simple creation of data classes from dictionaries."
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.6"
 
@@ -1125,9 +1125,9 @@ python-versions = ">=3.8,<4.0.0"
 
 [[package]]
 name = "nzshm-model"
-version = "0.2.0"
+version = "0.3.0"
 description = "The logic tree definitions, final configurations, and versioning of the New Zealand | Aotearoa National Seismic Hazard Model"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=3.8,<4.0"
 
@@ -2014,7 +2014,7 @@ test = []
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.8,<4.0"
-content-hash = "e0d5b1ab325d22bc3e929f30bc3c64a3200ce0e67afc96abf5ef63c5cca39670"
+content-hash = "09c5ee90db3889712a47d434a33f373e960aca0d1f2dd6c8654565885a9c0227"
 
 [metadata.files]
 aiohttp = [
@@ -3067,8 +3067,8 @@ nzshm-common = [
     {file = "nzshm_common-0.6.0.tar.gz", hash = "sha256:a449c9114814aad3e1751b49a290fb46f4fd6e916e5efced1560dac7ac81fa46"},
 ]
 nzshm-model = [
-    {file = "nzshm_model-0.2.0-py3-none-any.whl", hash = "sha256:4554895d63f2dda2c5f5ca52be44748f84bed8bba40716f415062c8f4f0d010a"},
-    {file = "nzshm_model-0.2.0.tar.gz", hash = "sha256:b4588030cb14d75917924b17007229556c62aa823a6bffa14cd71b97caa124cd"},
+    {file = "nzshm_model-0.3.0-py3-none-any.whl", hash = "sha256:4244c31780cdab21f121028ac6eee5ed95c4e6e7c5d6a70340c07e46d73a565d"},
+    {file = "nzshm_model-0.3.0.tar.gz", hash = "sha256:3ebe0e919585cb30ea318a82f66a5d5e6f4c0893a6edacee82e548776b067b6b"},
 ]
 packaging = [
     {file = "packaging-23.1-py3-none-any.whl", hash = "sha256:994793af429502c4ea2ebf6bf664629d07c1a9fe974af92966e4b8d2df7edc61"},
