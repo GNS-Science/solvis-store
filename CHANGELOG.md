@@ -4,6 +4,9 @@
 ### Added
  - poetry run cli -> scripts/cli.py
  - for extra dependencies install with `poetry install --with scripts`
+ - get_ruptures query
+ - get_rupture_ids query
+
 ### Changed
  - requires nzshm-model >=0.3.0
 
