@@ -1,7 +1,7 @@
 [tool]
 [tool.poetry]
 name = "solvis-store"
-version = "1.0.1"
+version = "2.0.0"
 homepage = "https://github.com/GNS-Science/solvis-store"
 description = "Solvis Store."
 authors = ["Oakley Jurgens <nshm@gns.cri.nz>", "Chris Chamberlain <chrisbc@artisan.co.nz>"]
@@ -26,9 +26,9 @@ packages = [
 cli = 'scripts.cli:cli'
 
 [tool.poetry.dependencies]
-python = ">=3.8,<4.0"
+python = ">=3.9,<4.0"
 pynamodb = "^5.4.1"
-solvis = "^0.7.0"
+solvis = {git = "https://github.com/GNS-Science/solvis.git", rev = "a15f0234a225aa8090ef7cb70b49531ffa01ae2c"}
 
 # see https://github.com/orgs/python-poetry/discussions/7937
 urllib3 = "<2" 
@@ -61,7 +61,6 @@ toml = {version = "^0.10.2", optional = true}
 tox = { version = "^4.4.12"}
 twine  = { version = "^3.3.0"}
 virtualenv  = { version = "^20.2.2", optional = true}
-
 
 
 [tool.poetry.group.scripts.dependencies]
