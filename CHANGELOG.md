@@ -1,5 +1,14 @@
 # Changelog
 
+## [2.0.0] - 2023-07-17
+### Added
+ - new fault_name model & queries
+### Changed
+ - solvis dependency >= 0.7.0
+ - API changes
+    - get_ruptures -> query.get_location_radius_ruptures
+    - get_rupture_ids -> query.get_location_radius_rupture_ids
+
 ## [1.1.0] - 2023-04-24
 ### Added
  - poetry run cli -> scripts/cli.py
