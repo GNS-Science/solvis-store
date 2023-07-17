@@ -28,7 +28,11 @@ cli = 'scripts.cli:cli'
 [tool.poetry.dependencies]
 python = ">=3.8,<4.0"
 pynamodb = "^5.4.1"
+solvis = "^0.7.0"
 
+# see https://github.com/orgs/python-poetry/discussions/7937
+urllib3 = "<2" 
+numpy = "<1.25"
 
 
 [tool.poetry.group.dev.dependencies]
@@ -66,7 +70,6 @@ nshm-toshi-client = "^1.0.0"
 nzshm-common = "^0.6.0"
 nzshm-model = "^0.3.0"
 pyvista = "^0.38.5"
-solvis = "^0.6.0"
 
 [tool.poetry.extras]
 test = [
