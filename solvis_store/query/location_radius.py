@@ -4,9 +4,8 @@ from functools import lru_cache
 from typing import Iterable, Iterator, NamedTuple, Set, Tuple
 
 from solvis_store import model
-
-from .cloudwatch import ServerlessMetricWriter
-from .config import CLOUDWATCH_APP_NAME
+from solvis_store.cloudwatch import ServerlessMetricWriter
+from solvis_store.config import CLOUDWATCH_APP_NAME
 
 log = logging.getLogger(__name__)
 
@@ -47,11 +46,9 @@ def get_the_ids(rupture_set_id: str, locations: Tuple[str], radius: int, union: 
             )
 
             if first_set:
-                rupt_ids = set()
-                if not union:
-                    rupt_ids = set(item.ruptures)
-
+                rupt_ids = set(item.ruptures)
                 first_set = False
+                continue
 
             if union:
                 rupt_ids = rupt_ids.union(set(item.ruptures))
@@ -69,13 +66,13 @@ def get_the_ids(rupture_set_id: str, locations: Tuple[str], radius: int, union: 
 
 
 # QUERY operations for the API get endpoint(s)
-def get_ruptures(
+def get_location_radius_ruptures(
     rupture_set_id: str, locations: Tuple[str], radius: int, union: bool = False
 ) -> Iterator[RuptureIndexLocationDistance]:
 
     t0 = dt.utcnow()
 
-    log.debug(f'get_rupture_ids({locations}, {radius}, union: {union})')
+    log.debug(f'get_location_radius_rupture_ids({locations}, {radius}, union: {union})')
 
     def filter_ruptures(id_list: Iterable[int]) -> Iterator[RuptureIndexLocationDistance]:
         for loc in locations:
@@ -99,19 +96,21 @@ def get_ruptures(
     ruptures = filter_ruptures(filtered_ids)
 
     t1 = dt.utcnow()
-    db_metrics.put_duration(__name__, 'get_ruptures', t1 - t0)
+    db_metrics.put_duration(__name__, 'get_location_radius_ruptures', t1 - t0)
     return ruptures
 
 
 # QUERY operations for the API get endpoint(s)
-def get_rupture_ids(rupture_set_id: str, locations: Tuple[str], radius: int, union: bool = False) -> Set[int]:
+def get_location_radius_rupture_ids(
+    rupture_set_id: str, locations: Tuple[str], radius: int, union: bool = False
+) -> Set[int]:
 
     t0 = dt.utcnow()
 
-    log.debug(f'get_rupture_ids({locations}, {radius}, union: {union})')
+    log.debug(f'get_location_radius_rupture_ids({locations}, {radius}, union: {union})')
 
     ids = get_the_ids(rupture_set_id, locations, radius, union)
 
     t1 = dt.utcnow()
-    db_metrics.put_duration(__name__, 'get_rupture_ids', t1 - t0)
+    db_metrics.put_duration(__name__, 'get_location_radius_rupture_ids', t1 - t0)
     return ids

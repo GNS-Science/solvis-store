@@ -38,7 +38,21 @@ class RuptureSetLocationDistances(MetricatedModel):
     rupture_count = NumberAttribute()
 
 
-table_classes = (RuptureSetLocationDistances,)
+class RuptureSetParentFaultRuptures(MetricatedModel):
+    class Meta:
+        billing_mode = 'PAY_PER_REQUEST'
+        table_name = f"SOLVIS_RuptureSetParentFaultRuptures-{DEPLOYMENT_STAGE}"
+        region = REGION
+
+    rupture_set_id = UnicodeAttribute(hash_key=True)
+    fault_name = UnicodeAttribute(range_key=True)  # eg WLG:100
+
+    fault_id = NumberAttribute()
+    ruptures = NumberSetAttribute()  # Rupture Index,
+    rupture_count = NumberAttribute()
+
+
+table_classes = (RuptureSetLocationDistances, RuptureSetParentFaultRuptures)
 
 
 def set_local_mode(host="http://localhost:8000"):
