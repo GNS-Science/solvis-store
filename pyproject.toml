@@ -27,8 +27,8 @@ cli = 'scripts.cli:cli'
 
 [tool.poetry.dependencies]
 python = ">=3.9,<4.0"
-pynamodb = "^5.4.1"
-solvis = {git = "https://github.com/GNS-Science/solvis.git", rev = "a15f0234a225aa8090ef7cb70b49531ffa01ae2c"}
+pynamodb = "^5.5.0"
+solvis = "0.8.1"
 
 # see https://github.com/orgs/python-poetry/discussions/7937
 urllib3 = "<2" 

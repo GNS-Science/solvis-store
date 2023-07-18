@@ -23,9 +23,10 @@ logging.getLogger('gql.transport.requests').setLevel(logging.WARN)
 logging.getLogger('solvis').setLevel(logging.INFO)
 logging.getLogger('solvis_store').setLevel(logging.DEBUG)
 
-formatter = logging.Formatter(fmt='%(asctime)s %(levelname)-8s %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
+formatter = logging.Formatter(fmt='%(asctime)s %(levelname)-8s %(name)s %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
 screen_handler = logging.StreamHandler(stream=sys.stdout)
 screen_handler.setFormatter(formatter)
+screen_handler.setLevel(logging.INFO)
 log.addHandler(screen_handler)
 
 #  _ __ ___   __ _(_)_ __
@@ -72,7 +73,7 @@ def radius(ctx, archive_path, model_id, dry_run, create_tables):
         ruptset_ids = list(set([branch.rupture_set_id for branch in fslt.branches]))
         assert len(ruptset_ids) == 1
         rupture_set_id = ruptset_ids[0]
-
+        click.echo(f"fault system key: {fault_system_key}")
         # build the models
         for mod in create.create_location_radius_rupture_models(
             comp._solutions[fault_system_key],
@@ -81,7 +82,7 @@ def radius(ctx, archive_path, model_id, dry_run, create_tables):
             distances=[10, 20, 30, 40, 50, 100, 200],
             create_tables=create_tables,
         ):
-            print(mod, mod.radius, mod.rupture_count)
+            click.echo(f"model: {mod}, radius: {mod.radius}, ruptures: {mod.rupture_count}")
             if not dry_run:
                 mod.save()
 
@@ -116,6 +117,7 @@ def parents(ctx, archive_path, model_id, dry_run, create_tables):
         raise ValueError('invalid solution archive.')
 
     fault_system_key = fslt.short_name
+    click.echo(f"fault system key: {fault_system_key}")
 
     # check the solutions in a given fault system have the same rupture_set
     ruptset_ids = list(set([branch.rupture_set_id for branch in fslt.branches]))
@@ -124,8 +126,8 @@ def parents(ctx, archive_path, model_id, dry_run, create_tables):
 
     fss = comp._solutions[fault_system_key]
 
-    for mod in create.create_parent_fault_rupture_mods(fss, rupture_set_id, create_tables):
-        print(mod, mod.fault_name, mod.fault_id, mod.rupture_count)
+    for mod in create.create_parent_fault_rupture_models(fss, rupture_set_id, create_tables):
+        click.echo(f"model: {mod}, {mod.fault_name}, {mod.fault_id}, {mod.rupture_count}")
         if not dry_run:
             mod.save()
 
