@@ -45,10 +45,10 @@ class RuptureSetParentFaultRuptures(MetricatedModel):
         region = REGION
 
     rupture_set_id = UnicodeAttribute(hash_key=True)
-    fault_name = UnicodeAttribute(range_key=True)  # eg WLG:100
+    fault_name = UnicodeAttribute(range_key=True)
 
     fault_id = NumberAttribute()
-    ruptures = NumberSetAttribute()  # Rupture Index,
+    ruptures = NumberSetAttribute()  # Rupture Index
     rupture_count = NumberAttribute()
 
 

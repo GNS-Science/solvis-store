@@ -3000,34 +3000,28 @@ files = [
 
 [[package]]
 name = "solvis"
-version = "0.8.0"
+version = "0.8.1"
 description = "analysis of opensha modular solution files."
 optional = false
 python-versions = ">=3.9,<4.0"
-files = []
-develop = false
+files = [
+    {file = "solvis-0.8.1-py3-none-any.whl", hash = "sha256:ef98cf9afa17dd29fa06e9c7d1af48a8d1893c08e7254b9d492eaca7272483bf"},
+    {file = "solvis-0.8.1.tar.gz", hash = "sha256:3a1d7fef33b9dd39456acf95f6300200a445bb627dd1a1759d4bf489d88e97da"},
+]
 
 [package.dependencies]
-click = "^8.1.3"
-click-plugins = "^1.1.1"
-geopandas = "^0.13.2"
+click = ">=8.1.3,<9.0.0"
+click-plugins = ">=1.1.1,<2.0.0"
+geopandas = ">=0.13.2,<0.14.0"
 numpy = "<1.25"
-pyproj = "^3.3"
-python-dateutil = "^2.8.2"
+pyproj = ">=3.3,<4.0"
+python-dateutil = ">=2.8.2,<3.0.0"
 pytz = "2021.3"
 urllib3 = "<2"
 
 [package.extras]
-dev = []
 scripts = ["boto3[scripts] (>=1.26.82,<2.0.0)", "nshm-toshi-client[scripts] (>=1.0.0,<2.0.0)", "nzshm-model[scripts] (>=0.3.0,<0.4.0)"]
-test = []
 vtk = ["pyvista[vtk] (>=0.37.0,<0.38.0)"]
-
-[package.source]
-type = "git"
-url = "https://github.com/GNS-Science/solvis.git"
-reference = "a15f0234a225aa8090ef7cb70b49531ffa01ae2c"
-resolved_reference = "a15f0234a225aa8090ef7cb70b49531ffa01ae2c"
 
 [[package]]
 name = "stack-data"
@@ -3460,4 +3454,4 @@ test = []
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.9,<4.0"
-content-hash = "15fb41ae66f9ba89bb5518cc135c16364d0c3d94ff07e7a0bf6b0c2cedfd4a7f"
+content-hash = "01577e273eebca82985790eacb40ebd4a65b5df25b381bb35bbdb7242d77bbde"

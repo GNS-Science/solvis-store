@@ -26,8 +26,9 @@ class RuptureIndexFault(NamedTuple):
 def query_fn(rupture_set_id: str, fault_names: Tuple[str]) -> List[mFNR]:
     log.debug(f'query_fn: {rupture_set_id} {fault_names}')
     items: List[mFNR] = []
-    for itm in mFNR.query(rupture_set_id, filter_condition=(mFNR.fault_name.is_in(*fault_names))):
-        items.append(itm)
+    for fault_name in fault_names:
+        for itm in mFNR.query(rupture_set_id, mFNR.fault_name == fault_name):
+            items.append(itm)
     return items
 
 
