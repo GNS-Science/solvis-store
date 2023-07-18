@@ -4,6 +4,7 @@
 ### Changed
  - update solvis and pynamodb versions
  - minor CLI output improvement
+ - fixed query syntax for fault_name
 
 ## [2.0.0] - 2023-07-17
 ### Added
