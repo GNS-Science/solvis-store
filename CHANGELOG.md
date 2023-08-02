@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.0.2] - 2023-08-02
+### Changed
+ - fix for union operation on get_location_radius_rupture_ids
+
 ## [2.0.1] - 2023-07-18
 ### Changed
  - update solvis and pynamodb versions
