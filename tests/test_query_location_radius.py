@@ -51,6 +51,22 @@ class TestRuptureIds(unittest.TestCase):
         ).save()
         return super(TestRuptureIds, self).setUp()
 
+    def test_get_location_radius_rupture_ids_miss_union(self):
+        rids = list(
+            get_location_radius_rupture_ids(
+                rupture_set_id='test_ruptset_id', locations=('NADA',), radius=10000, union=True
+            )
+        )
+        self.assertEqual(len(rids), 0)
+
+    def test_get_location_radius_rupture_ids_miss_intersection(self):
+        rids = list(
+            get_location_radius_rupture_ids(
+                rupture_set_id='test_ruptset_id', locations=('NADA',), radius=10000, union=False
+            )
+        )
+        self.assertEqual(len(rids), 0)
+
     def test_get_location_radius_rupture_ids_WLG(self):
         rids = list(get_location_radius_rupture_ids(rupture_set_id='test_ruptset_id', locations=('WLG',), radius=10000))
         self.assertEqual(len(rids), 3)

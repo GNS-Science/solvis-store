@@ -30,7 +30,7 @@ def query_fn(rupture_set_id, loc, radius):
 def get_the_ids(rupture_set_id: str, locations: Tuple[str], radius: int, union: bool) -> Set[int]:
     """get the set of rupture ids matching the query args"""
     first_set = True
-
+    rupt_ids = set()
     for loc in locations:
         items = query_fn(rupture_set_id, loc, radius)
 
