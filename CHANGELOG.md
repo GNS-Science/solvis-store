@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.0.3] - 2024-06-10
+### Changed
+ - update solvis to 0.11.1
+ - update nzshm-model to 0.4.0
+ - update mkdocs to 1.6 (along with extension sdependencies)
+ - Supporting Python version 3.9, 3.10, 3.11.
+
 ## [2.0.2] - 2023-08-02
 ### Changed
  - fix for union operation on get_location_radius_rupture_ids
