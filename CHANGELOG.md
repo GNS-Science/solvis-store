@@ -1,5 +1,11 @@
 # Changelog
 
+## [pre-release] - version pending
+### Changed
+ - update solvis to pre-release branch (0.12.alpha.1)
+ - update nzshm-common to 0.7.0
+ - update nzshm-model to 0.6.0
+
 ## [2.0.3] - 2024-06-10
 ### Changed
  - update solvis to 0.11.1

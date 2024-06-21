@@ -28,7 +28,7 @@ cli = 'scripts.cli:cli'
 [tool.poetry.dependencies]
 python = ">=3.9,<4.0"
 pynamodb = "^5.5.0"
-solvis = "^0.11.1"
+solvis = {git = "https://github.com/GNS-Science/solvis", rev = "pre-release"}
 
 # see https://github.com/orgs/python-poetry/discussions/7937
 urllib3 = "<2"
@@ -66,8 +66,8 @@ virtualenv  = { version = "^20.2.2", optional = true}
 [tool.poetry.group.scripts.dependencies]
 ipython = "^8.12.0"
 nshm-toshi-client = "^1.0.0"
-nzshm-common = "^0.6.0"
-nzshm-model = "^0.4.0"
+nzshm-common = "^0.7.0"
+nzshm-model = "^0.6.0"
 pyvista = "^0.38.5"
 
 [tool.poetry.extras]

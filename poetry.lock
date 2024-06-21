@@ -2375,13 +2375,13 @@ files = [
 
 [[package]]
 name = "nzshm-common"
-version = "0.6.1"
+version = "0.7.0"
 description = "A small pure python library for shared NZ NSHM data like locations."
 optional = false
-python-versions = ">=3.8,<4.0.0"
+python-versions = "<4.0.0,>=3.8"
 files = [
-    {file = "nzshm_common-0.6.1-py3-none-any.whl", hash = "sha256:06bd0b6a35b5adc05d080742885bb7273469ef7d08a9502f5ef30bb1f794aa0f"},
-    {file = "nzshm_common-0.6.1.tar.gz", hash = "sha256:97081e615fa311bae8161628bbb89d6b3799c7f246953325200c60cfc63e00f2"},
+    {file = "nzshm_common-0.7.0-py3-none-any.whl", hash = "sha256:21187d41fd8a87e0368cd6ef46080a02d7753917aebd287b5df2fe711e71e45e"},
+    {file = "nzshm_common-0.7.0.tar.gz", hash = "sha256:12ff96f2239a8e6345c9201cc45b8a97036085b918790ee9f60c0791d99a90e3"},
 ]
 
 [package.extras]
@@ -2389,13 +2389,13 @@ geometry = ["shapely (>=2.0.2,<3.0.0)"]
 
 [[package]]
 name = "nzshm-model"
-version = "0.4.0"
+version = "0.6.1"
 description = "The logic tree definitions, final configurations, and versioning of the New Zealand | Aotearoa National Seismic Hazard Model"
 optional = false
 python-versions = ">=3.9,<4.0"
 files = [
-    {file = "nzshm_model-0.4.0-py3-none-any.whl", hash = "sha256:ec357ee2fefc7a0d440fff413cc57429888962c23da24585aa208791c971e775"},
-    {file = "nzshm_model-0.4.0.tar.gz", hash = "sha256:827e48e8dd4f4326143527c61d9d6bd946cc1bcfa95733cd6cff889f29d4882c"},
+    {file = "nzshm_model-0.6.1-py3-none-any.whl", hash = "sha256:0ff94f330dad9a6c4a5526a95c370acb30eecd229b8628256baffe5810cc52b0"},
+    {file = "nzshm_model-0.6.1.tar.gz", hash = "sha256:d4651f53c3458f4b3a85a66344c8ca549435605b9da1845422910ef387d47d83"},
 ]
 
 [package.dependencies]
@@ -3491,29 +3491,34 @@ files = [
 
 [[package]]
 name = "solvis"
-version = "0.11.1"
+version = "0.12.0-alpha.1"
 description = "analysis of opensha modular solution files."
 optional = false
 python-versions = ">=3.9,<4.0"
-files = [
-    {file = "solvis-0.11.1-py3-none-any.whl", hash = "sha256:e3fe49f4d1a3bd9454fc62fdc0dc5d948f5c8688d254dbba4c2ffb75edae3892"},
-    {file = "solvis-0.11.1.tar.gz", hash = "sha256:7fe967cf164110d7d7d6d9ebd5f711672b46eb9ed6dcefedd73b77c67a789361"},
-]
+files = []
+develop = false
 
 [package.dependencies]
-click = ">=8.1.3,<9.0.0"
-click-plugins = ">=1.1.1,<2.0.0"
-geopandas = ">=0.13.2,<0.14.0"
+click = "^8.1.3"
+click-plugins = "^1.1.1"
+geopandas = "^0.13.2"
 numpy = "<1.25"
-nzshm-model = ">=0.4.0,<0.5.0"
-pyproj = ">=3.3,<4.0"
-python-dateutil = ">=2.8.2,<3.0.0"
+nzshm-model = "^0.6"
+pyproj = "^3.3"
+python-dateutil = "^2.8.2"
 pytz = "2021.3"
 urllib3 = "<2"
 
 [package.extras]
+demo = []
 scripts = ["boto3[scripts] (>=1.26.82,<2.0.0)", "nshm-toshi-client[scripts] (>=1.0.0,<2.0.0)"]
 vtk = ["pyvista[vtk] (>=0.37.0,<0.38.0)"]
+
+[package.source]
+type = "git"
+url = "https://github.com/GNS-Science/solvis"
+reference = "pre-release"
+resolved_reference = "6252be8124dfdd46409129dcd5edc92a524b72a8"
 
 [[package]]
 name = "stack-data"
@@ -3963,4 +3968,4 @@ test = []
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.9,<4.0"
-content-hash = "61ba0d3029980f20dda1eaf80b3109cc8c15b672ebfd6c7b4ae62c427998bf80"
+content-hash = "02013a97702cca03cbdcafad0446bbee1a74baf7d0ef334dea21a13bf5498ad7"
