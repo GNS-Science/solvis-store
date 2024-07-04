@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.0.4] - 2024-07-04
+
+### Changed
+ - update dependencies
+   - solvis to >=0.11.1
+   - nzshm-common = "^0.8.1"
+   - nzshm-model = "^0.10.6"
+ - move scripts package into solvis_store package
+ - update testing instructions in README
+ - remove twine and docs from toc build step
+ - add python 3.12 to tox setup
+ - add docs page for scripts
+
 ## [2.0.3] - 2024-06-10
 ### Changed
  - update solvis to 0.11.1
