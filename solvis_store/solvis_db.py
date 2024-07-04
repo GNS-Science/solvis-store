@@ -2,7 +2,6 @@ import logging
 from typing import Dict, Iterator, List
 
 import solvis
-
 from solvis_store import model
 
 log = logging.getLogger(__name__)

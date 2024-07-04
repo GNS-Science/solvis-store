@@ -1,10 +1,16 @@
 # Changelog
 
-## [pre-release] - version pending
+## [2.0.4] - 2024-07-04
+
 ### Changed
- - update solvis to pre-release branch (0.12.alpha.1)
- - update nzshm-common to 0.7.0
- - update nzshm-model to 0.6.0
+ - update dependencies
+   - solvis to >=0.11.1
+   - nzshm-common = "^0.8.1"
+   - nzshm-model = "^0.10.6"
+ - move scripts package into solvis_store package
+ - update testing instructions in README
+ - remove twine and docs from toc build step
+ - add python 3.12 to tox setup
 
 ## [2.0.3] - 2024-06-10
 ### Changed

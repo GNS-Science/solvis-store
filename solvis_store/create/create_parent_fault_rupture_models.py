@@ -4,7 +4,6 @@ from functools import lru_cache
 from typing import Iterable, Iterator, Set, Tuple
 
 from solvis import FaultSystemSolution
-
 from solvis_store import model
 
 log = logging.getLogger(__name__)

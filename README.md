@@ -23,7 +23,7 @@ Prereq: make sure poetry can use the `.env` file
 poetry self add poetry-dotenv-plugin
 ```
 
-`poetry run pytest`
+`TESTING=1 poetry run pytest`
 
 ## Credits
 
