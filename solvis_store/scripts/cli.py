@@ -1,15 +1,15 @@
 """Console script for solvis."""
 # noqa
 import logging
-import sys
 import pathlib
+import sys
+
 import click
 import nzshm_model
-
-from solvis import CompositeSolution
-from solvis_store import create
-
 from nzshm_common.location.location import LOCATION_LISTS
+from solvis import CompositeSolution
+
+from solvis_store import create
 
 SKIP_FS_NAMES = ['SLAB']
 

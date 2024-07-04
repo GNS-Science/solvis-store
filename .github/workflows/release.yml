@@ -9,18 +9,22 @@ on:
     tags:
       - 'v*'
 
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
-
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "release"
+
+  # call-test-workflow:
+  #   #https://docs.github.com/en/actions/using-workflows/reusing-workflows#calling-a-reusable-workflow
+  #   uses: ./.github/workflows/run-tests.yml
+  #   secrets: inherit
+
   release:
     name: Create Release
+    # needs: call-test-workflow
+
+    # permissions:
+    #   id-token: write  # IMPORTANT: this permission is mandatory for trusted publishing
+
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-versions: ["3.9", "3.10"]
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -35,34 +39,24 @@ jobs:
 
       - name: Get Changelog Entry
         id: changelog_reader
-        uses: mindsers/changelog-reader-action@v2
+        uses: GNS-Science/changelog-reader-action@master
         with:
           validation_depth: 10
           version: ${{ steps.tag_name.outputs.current_version }}
           path: ./CHANGELOG.md
 
+      # run build using the minimum supported python version
       - uses: actions/setup-python@v4
         with:
-          python-version: ${{ matrix.python-versions }}
+          python-version: "3.9"
 
       - name: Install and configure Poetry
-        uses: snok/install-poetry@v1
+        uses: GNS-Science/install-poetry@main
         with:
           # version: 1.2.0b3
           virtualenvs-create: true
           virtualenvs-in-project: true
           installer-parallel: true
-
-      - name: build documentation
-        run: |
-          poetry install -E doc
-          poetry run mkdocs build
-
-      - name: publish documentation
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          personal_token: ${{ secrets.PERSONAL_TOKEN }}
-          publish_dir: ./site
 
       - name: Build wheels and source tarball
         run: >-
@@ -74,7 +68,7 @@ jobs:
 
       - name: create github release
         id: create_release
-        uses: softprops/action-gh-release@v1
+        uses: GNS-Science/action-gh-release@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -88,4 +82,4 @@ jobs:
         with:
           user: __token__
           password: ${{ secrets.PYPI_API_TOKEN }}
-          skip_existing: true
+          skip-existing: true
