@@ -6,6 +6,7 @@ from pyproj import Transformer
 
 # from solvis.get_secret import get_secret
 from solvis import FaultSystemSolution, geometry
+
 from solvis_store import model
 
 log = logging.getLogger(__name__)
