@@ -1,5 +1,11 @@
 # Changelog
 
+## [2.0.5] - 2024-07-08
+
+### Changed
+ - update pynamodb to ^6.0.1
+ - removed stale pyproject config. `poetry check` now passes.
+
 ## [2.0.4] - 2024-07-04
 
 ### Changed

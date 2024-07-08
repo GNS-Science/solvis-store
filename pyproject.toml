@@ -27,12 +27,12 @@ cli = 'scripts.cli:cli'
 
 [tool.poetry.dependencies]
 python = ">=3.9,<4.0"
-pynamodb = "^5.5.0"
 solvis = ">=0.11.1"
 
 # see https://github.com/orgs/python-poetry/discussions/7937
 urllib3 = "<2"
 numpy = "<1.25"
+pynamodb = "^6.0.1"
 
 [tool.poetry.group.dev.dependencies]
 black  = { version = "^22.3"}
@@ -66,6 +66,9 @@ mkdocs-pymdownx-material-extras = "^2.5.6"
 mkdocs-with-pdf = "^0.9.3"
 mkdocs-click = "^0.8.1"
 
+[tool.poetry.group.scripts]
+optional = true
+
 [tool.poetry.group.scripts.dependencies]
 ipython = "^8.12.0"
 nshm-toshi-client = "^1.0.0"
@@ -75,26 +78,6 @@ pyvista = "^0.38.5"
 click = "^8.1.7"
 
 [tool.poetry.extras]
-test = [
-    "pytest",
-    "black",
-    "isort",
-    "mypy",
-    "flake8",
-    "flake8-docstrings",
-    "pytest-cov"
-    ]
-
-dev = ["tox", "pre-commit", "virtualenv", "pip", "twine", "toml", "bump2version"]
-
-doc = [
-    "mkdocs",
-    "mkdocs-include-markdown-plugin",
-    "mkdocs-material",
-    "mkdocstrings",
-    "mkdocs-material-extension",
-    "mkdocs-autorefs"
-    ]
 
 [tool.black]
 line-length = 120
