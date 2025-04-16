@@ -12,6 +12,6 @@ jobs:
     uses: GNS-Science/nshm-github-actions/.github/workflows/python-run-tests.yml@main
     with:
       operating-systems: "['ubuntu-latest', 'macos-latest', 'windows-latest']"
-      # re-enable 3.9 after https://github.com/GNS-Science/solvis-store/issues/17
-      python-versions: "[ '3.10', '3.11']" #"['3.9', '3.10', '3.11']"
+      python-versions: "['3.9', '3.10', '3.11']"
+      fail-fast: false
     secrets: inherit
